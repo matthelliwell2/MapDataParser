@@ -20,9 +20,8 @@ class Contour(feature: SimpleFeature) {
      * and not depth
      */
     fun getSmoothedContour(): Array<Coordinate> {
-        println("Smoothing contour")
         val coordinates = JTS.smooth(multiLineString, 0.0).coordinates
-        coordinates.forEach { c -> c.z = height }
+        coordinates.forEachIndexed {i, _ -> coordinates[i].z = height}
 
         return coordinates
     }

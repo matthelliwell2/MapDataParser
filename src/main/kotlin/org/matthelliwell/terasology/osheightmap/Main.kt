@@ -27,8 +27,10 @@ private fun processShapeFiles(shapeFileDir: File) {
     val featureIterator = iterator(contourFile)
     processContours(heightGenerator, featureIterator)
 
-    // TODO load spot heights
-    val spotHeightFile = shapeFileDir.listFiles({ file -> file.name.endsWith("_point.shp") })[0]
+    // TODO load spot heights if they exist
+//    val spotHeightFile = shapeFileDir.listFiles({ file -> file.name.endsWith("_point.shp") })[0]
+
+    heightGenerator.generate()
 }
 
 /**

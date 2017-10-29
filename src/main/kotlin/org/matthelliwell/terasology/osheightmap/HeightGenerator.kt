@@ -13,6 +13,7 @@ class HeightGenerator {
 
     fun add(contour: Contour) {
         builder.add(contour.getSmoothedContour())
+        generate()
     }
 
     fun generate() {

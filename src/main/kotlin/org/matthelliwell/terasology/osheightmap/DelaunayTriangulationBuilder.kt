@@ -8,26 +8,24 @@ import com.vividsolutions.jts.triangulate.quadedge.Vertex
 
 
 /**
- * This is just a cut down copy of com.vividsolutions.jts.triangulate.DelaunayTriangulationBuilder but slightly modified to:
- * 1. Avoid the array copying that it keeps doing
- * 2. Not check for duplicates as we can assume the coordinates we pass in are unique
- * 3. Allow the coordinates to be built up incrementally so we don't have to keep a separate array of them
+ * This is just a cut down copy of com.vividsolutions.jts.triangulate.DelaunayTriangulationBuilder.
  */
 class DelaunayTriangulationBuilder {
 
     private val tolerance = 0.0
 
-    private val siteCoords: MutableList<Vertex> = mutableListOf()
+    private val siteCoords: MutableList<Coordinate> = mutableListOf()
+
     val subdivision: QuadEdgeSubdivision by lazy {
         val subdivision = QuadEdgeSubdivision(envelope, tolerance)
         val triangulator = IncrementalDelaunayTriangulator(subdivision)
-        triangulator.insertSites(siteCoords)
+        triangulator.insertSites(siteCoords.distinct().map { c -> Vertex(c) })
         subdivision
     }
 
     val envelope: Envelope by lazy {
         val envelope = Envelope()
-        siteCoords.forEach { vertex -> envelope.expandToInclude(vertex.x, vertex.y) }
+        siteCoords.forEach { coord -> envelope.expandToInclude(coord.x, coord.y) }
         envelope
     }
 
@@ -38,6 +36,6 @@ class DelaunayTriangulationBuilder {
      * @param coords a collection of Coordinates.
      */
     fun add(coords: Array<Coordinate>) {
-        siteCoords.addAll(coords.map { c -> Vertex(c) })
+        siteCoords.addAll(coords)
     }
 }
