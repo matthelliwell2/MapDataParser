@@ -1,0 +1,6 @@
+src/main/data/
+.gradle
+build
+out
+*.class
+*.log
